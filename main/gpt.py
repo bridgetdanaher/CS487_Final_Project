@@ -1,5 +1,6 @@
 import openai
 from openai import OpenAI
+from parse import *
 import os
 
 def ask_llm_for_patch(client, code, sanitizer_output):
@@ -17,7 +18,8 @@ def ask_llm_for_patch(client, code, sanitizer_output):
 
 def main():
     client = OpenAI(api_key=os.environ["OPEN_API_KEY"])
-    res = ask_llm_for_patch(client, "Hello", "Hello!")
+    source_code = parse_code("codebase/example1.c")
+    res = ask_llm_for_patch(client, source_code, "Hello!")
     print(res)
 
 if __name__ == "__main__":

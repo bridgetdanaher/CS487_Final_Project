@@ -6,6 +6,7 @@ afl_fuzzer_path = "../afl-2.52b/afl-fuzz"
 def run_sanitizer(program_path):
     # Compile the file and get the sanitizer result
     executable_name = program_path[:-2]
+    
     # -O1 recommended with ASan to reduce false positives
     warnings = "-Wall -Wextra -Wformat -Wshift-overflow -Wcast-align -Wstrict-overflow -fstack-protector-strong"
     command = f"mkdir -p executables; gcc codebase/{program_path} {warnings} -O1 -fsanitize=address -g -o executables/{executable_name}"
@@ -56,6 +57,7 @@ def run_fuzzer(program_path):
         timeout=10,
         shell=True
     )
+    return result
 
 def run_file(executable_path, input, inputFromFile=False):
     executable_name = f"./executables/{executable_path}"
@@ -86,8 +88,10 @@ def run_file(executable_path, input, inputFromFile=False):
 
 def main():
     res = run_sanitizer("example1.c")
+    print(res)
     res = run_fuzzer("example1.c")
-    res = run_file("example1", "Name")
+    print(res)
+    res = run_file("example1", "input/test")
     print(res)
 
 if __name__ == "__main__":
